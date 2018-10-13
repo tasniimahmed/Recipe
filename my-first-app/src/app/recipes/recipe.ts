@@ -1,13 +1,16 @@
+import { ingredient } from "../Shared/ingredient";
+
 export class Recipe {
     public name: string;
     public description: string;
     public imagePath: string;
-    static TsComponent: any;
+    public ingredients: ingredient[];
 
-    constructor(name: string, desc: string, imagePath: string) {
+    constructor(name: string, desc: string, imagePath: string, ingredients: ingredient[]) {
         this.name = name;
         this.description = desc;
         this.imagePath = imagePath;
+        this.ingredients= ingredients;
     }
 
 }
