@@ -2,10 +2,12 @@ import {Recipe} from './recipe';
 import { Injectable} from '@angular/core';
 import { ingredient } from '../Shared/ingredient';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class RecipeService {
 /*recipeSelected = new EventEmitter<Recipe>();*/
+recipesChanged = new Subject<Recipe[]>();
     private recipes: Recipe[] = [
         new Recipe('Tasty fries', 'This is simply a test', 'https://cdn-image.foodandwine.com/sites/default/files/styles/medium_2x/public/2011-r-xl-aspen-app-bistro-fries.jpg?itok=--_Wvek5', [
         new ingredient('Meat', 1),
@@ -21,6 +23,11 @@ export class RecipeService {
 
       }
 
+      setRecipes(recipes: Recipe[]){
+          this.recipes = recipes;
+          this.recipesChanged.next(this.recipes.slice());
+      }
+
       getRecipes(){
           return this.recipes.slice();
       }
@@ -30,5 +37,19 @@ export class RecipeService {
 
       addIngredientsToShoppingList(ingredients:ingredient[]){
           this.slService.addIngredients(ingredients);
+      }
+
+      addRecipe(recipe:Recipe){
+          this.recipes.push(recipe);
+          this.recipesChanged.next(this.recipes.slice());
+      }
+
+      updateRecipe(index: number,newRecipe: Recipe){
+             this.recipes[index] = newRecipe;
+             this.recipesChanged.next(this.recipes.slice());
+      }
+      deleteRecipe(index:number){
+          this.recipes.splice(index,1);
+          this.recipesChanged.next(this.recipes.slice());
       }
 }
